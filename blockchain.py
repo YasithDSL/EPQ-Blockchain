@@ -4,6 +4,8 @@ from time import time
 
 # TODO include previous hash in next block's proof, something the guide writer did not think about.
 
+# class definiton created with base structure from Learn Blockchains by Building One, (van Flymen, 2017).
+
 class Blockchain(object):
 
     def __init__(self):
