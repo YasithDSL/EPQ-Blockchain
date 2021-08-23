@@ -62,7 +62,7 @@ def full_chain():
     return jsonify(response), 200
 
 @app.route('/nodes/register', methods=['POST'])
-def register_node():
+def register_nodes():
     values = request.get_json()
 
     nodes = values.get('nodes')
@@ -86,7 +86,7 @@ def consensus():
     if replaced:
         response = {
             'message': 'Current chain on node has been replaced',
-            'new_chain': blockchain.new_chain
+            'new_chain': blockchain.chain
         }
     else:
         response = {

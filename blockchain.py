@@ -20,7 +20,7 @@ class Blockchain(object):
     
     def register_node(self, node_address):
         parsed_url = urlparse(node_address)
-        self.nodes.add(parsed_url)
+        self.nodes.add(parsed_url.netloc)
     
     def valid_chain(self, chain):
         
@@ -60,7 +60,7 @@ class Blockchain(object):
 
                 if length > max_length and self.valid_chain(chain):
                     max_length = max_length
-                    new_chain = new_chain
+                    new_chain = chain
         if new_chain:
             self.chain = new_chain
             return True
