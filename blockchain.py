@@ -1,6 +1,8 @@
 import hashlib
 import json
 from time import time
+from urllib.parse import urlparse
+import requests
 
 # TODO include previous hash in next block's proof, something the guide writer did not think about.
 
@@ -12,7 +14,58 @@ class Blockchain(object):
         self.chain = []
         self.current_transactions = []
 
+        self.nodes = set()
+
         self.new_block(previous_hash = 1, proof = 100)
+    
+    def register_node(self, node_address):
+        parsed_url = urlparse(node_address)
+        self.nodes.add(parsed_url)
+    
+    def valid_chain(self, chain):
+        
+        last_block = chain[0]
+        current_index = 1
+
+        while current_index < len(chain):
+            block = chain[current_index]
+            print(f'{last_block}')
+            print(f'{block}')
+            print('\n----------\n')
+            if block['previous_hash'] != self.hash(last_block):
+                return False
+            
+            if not self.valid_proof(last_block['proof'], block['proof']):
+                return False
+            
+            last_block = block
+            current_index += 1
+        
+        return True
+    
+    def resolve_conflicts(self):
+        # definition of consensus algorithm TODO Edit this to make it optimal
+
+        neighbours = self.nodes
+        new_chain = None
+
+        max_length = len(self.chain)
+
+        for node in neighbours:
+            response = requests.get(f'http://{node}/chain')
+
+            if response.status_code == 200:
+                length = response.json()['length']
+                chain = response.json()['chain']
+
+                if length > max_length and self.valid_chain(chain):
+                    max_length = max_length
+                    new_chain = new_chain
+        if new_chain:
+            self.chain = new_chain
+            return True
+        
+        return False
     
     def new_block(self, proof, previous_hash = None):
         block = {
