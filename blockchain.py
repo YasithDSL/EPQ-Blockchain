@@ -8,7 +8,7 @@ import requests
 
 # class definiton created with base structure from Learn Blockchains by Building One, (van Flymen, 2017).
 
-class Blockchain(object):
+class Blockchain:
 
     def __init__(self):
         self.chain = []
