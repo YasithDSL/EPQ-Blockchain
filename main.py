@@ -3,7 +3,7 @@ from flask import Flask
 from uuid import uuid4
 from blockchain import Blockchain
 from flask import jsonify, request
-
+import os
 # creates our node (one node out of many which can connect)
 app = Flask(__name__)
 
@@ -98,5 +98,5 @@ def consensus():
 
 # runs the server on port 5000
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000)
+    app.run(host='localhost', debug=False,  port=os.environ.get('PORT', 80))
 
