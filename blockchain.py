@@ -93,7 +93,8 @@ class Blockchain:
     def proof_of_work(self, last_proof):
         proof = 0
 
-        while self.valid_proof(last_proof, proof) is False:
+        # including the last block's transactions in the proof of the next block to ensure immutability. 
+        while self.valid_proof(last_proof, proof, Blockchain.hash(self.chain[-1])) is False:
             proof += 1
 
         return proof
@@ -105,11 +106,11 @@ class Blockchain:
         return hashlib.sha256(block_string).hexdigest()
 
     @staticmethod
-    def valid_proof(last_proof, proof):
-        guess = f'{last_proof}{proof}'.encode()
+    def valid_proof(last_proof, proof, last_block_hash=None):
+        guess = f'{last_proof}{proof}{last_block_hash}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
 
-        return guess_hash[:4] == "0000"
+        return guess_hash[:5] == "00000"
 
     @property
     def last_block(self):
