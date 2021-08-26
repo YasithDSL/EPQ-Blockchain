@@ -4,8 +4,6 @@ from time import time
 from urllib.parse import urlparse
 import requests
 
-# TODO include previous hash in next block's proof, something the guide writer did not think about.
-
 # class definiton created with base structure from Learn Blockchains by Building One, (van Flymen, 2017).
 
 class Blockchain:
