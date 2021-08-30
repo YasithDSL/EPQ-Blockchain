@@ -13,13 +13,14 @@ class Blockchain:
         self.current_transactions = []
 
         self.nodes = set()
-
+        self.node_identifiers = set()
         self.new_block(previous_hash = 1, proof = 100)
     
-    def register_node(self, node_address):
+    def register_node(self, node_address, node_identifier):
         parsed_url = urlparse(node_address)
         self.nodes.add(parsed_url.netloc)
-    
+        self.node_identifiers.add(node_identifier)
+        
     def valid_chain(self, chain):
         
         last_block = chain[0]
