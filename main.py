@@ -4,11 +4,17 @@ from uuid import uuid4
 from blockchain import Blockchain
 from flask import jsonify, request
 import os
+import sys
 # creates our node (one node out of many which can connect)
 app = Flask(__name__)
 
 # creates a random name, a node identifier.
-node_identifier = str(uuid4()).replace('-', '')
+if len(sys.argv[1]) == 32:
+    node_identifier = sys.argv[1]
+else:
+    print("Error: Unknown node identifier")
+    input()
+    quit()
 
 # creates an instance of the blockchain
 blockchain = Blockchain()
@@ -70,11 +76,11 @@ def register_nodes():
         return "Error: Please supply a valid list of nodes", 400
 
     for node in nodes:
-        blockchain.register_node(node)
+        blockchain.register_node(node, node_identifier)
     
     response = {
         'message': 'New nodes have been added',
-        'total_nodes': list(blockchain.nodes),
+        'total_nodes': list(blockchain.node_identifiers),
     }
     
     return jsonify(response), 201
@@ -99,4 +105,3 @@ def consensus():
 # runs the server on port 5000
 if __name__ == '__main__':
     app.run(host='localhost', debug=False,  port=os.environ.get('PORT', 80))
-
