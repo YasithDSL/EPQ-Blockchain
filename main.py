@@ -14,7 +14,7 @@ if len(sys.argv[1]) == 32:
 else:
     print("Error: Unknown node identifier")
     input()
-    quit()
+    sys.exit()
 
 # creates an instance of the blockchain
 blockchain = Blockchain()
