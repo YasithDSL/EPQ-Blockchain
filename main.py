@@ -52,7 +52,11 @@ def new_transaction():
         return 'Missing values', 400
     balance = blockchain.retrieve_balance(values['sender'])
     if balance < values['amount']:
-        return "Error: Insufficient balance to carry out transaction", 200
+        response = {
+            'message': 'Error: Insufficient balance'
+        }
+        
+        return response, 400
         
     index = blockchain.new_transactions(values['sender'], values['recipient'], values['amount'])
 
