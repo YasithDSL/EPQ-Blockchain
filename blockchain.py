@@ -98,6 +98,19 @@ class Blockchain:
 
         return proof
 
+    def retrieve_balance(self, address):
+        income = 0
+        expenses = 0
+        
+        for i in self.chain:
+            for j in i["transactions"]:
+                if j["recipient"] == address:
+                    income += j["amount"]
+                if j["sender"] == address:
+                    expenses += j["amount"]
+
+        return income - expenses
+
     @staticmethod
     def hash(block):
         block_string = json.dumps(block, sort_keys=True).encode()

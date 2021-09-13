@@ -50,7 +50,10 @@ def new_transaction():
     required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
         return 'Missing values', 400
-    
+    balance = blockchain.retrieve_balance(values['sender'])
+    if balance < values['amount']:
+        return "Error: Insufficient balance to carry out transaction", 200
+        
     index = blockchain.new_transactions(values['sender'], values['recipient'], values['amount'])
 
     response = {
@@ -66,6 +69,21 @@ def full_chain():
         'length': len(blockchain.chain)
     }
     return jsonify(response), 200
+
+@app.route('/nodes/balance', methods=['POST'])
+def retrieve_balance():
+    values = request.get_json()
+
+    addr = values.get('address')
+    if addr is None:
+        return "Error: Missing Address", 400
+    balance = blockchain.retrieve_balance(addr)
+    response = {
+        'balance': balance,
+    }
+    
+    return jsonify(response), 200
+
 
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
