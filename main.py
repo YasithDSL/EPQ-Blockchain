@@ -12,9 +12,7 @@ app = Flask(__name__)
 if len(sys.argv[1]) == 32:
     node_identifier = sys.argv[1]
 else:
-    print("Error: Unknown node identifier")
-    input()
-    sys.exit()
+    node_identifier = "f51749636f5744b7951157a346b5cc09"
 
 # creates an instance of the blockchain
 blockchain = Blockchain()
